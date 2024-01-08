@@ -19,18 +19,21 @@ class ColoredPoint {
     }
 }
 // Define the canvas
-var canvas = document.getElementById('Canvas');
-var context = canvas.getContext('2d');
+const canvas = document.getElementById('Canvas');
+const context = canvas.getContext('2d');
 
 // Define the buttons
 const ResetButton = document.getElementById('ResetButton');
 const AddButton = document.getElementById('AddButton');
+const RemoveButton = document.getElementById('RemoveButton');
 const ShowButton = document.getElementById('ShowButton');
 const EuclideanButton = document.getElementById('Euclidean');
 const ManhattanButton = document.getElementById('Manhattan');
 
+// Assign the functions to their buttons
 ResetButton.addEventListener('click', reset);
 AddButton.addEventListener('click', add);
+RemoveButton.addEventListener('click', remove);
 ShowButton.addEventListener('click', ShowPoints);
 EuclideanButton.addEventListener('click', draw);
 ManhattanButton.addEventListener('click', mDraw);
@@ -39,12 +42,13 @@ canvas.addEventListener("mousedown", function(event){
     PointAtMousePosition(canvas, event);
 });
 
-// initialize the canvas
-canvas.width = 500;
-canvas.height = 500;
-context.fillRect(0, 0, 500, 500); //(x, y, width, height)
+// Initialize the canvas (I need to find a better way then just hard-coding the offsets since they're specific to my computer right now.)
+canvas.width = Math.min(600, screen.width - 15);
+canvas.height = Math.min(600, screen.height - 315);
 
-// gets all the color values of the image as a list 
+context.fillRect(0, 0, canvas.width, canvas.height); //(x, y, width, height)
+
+// Gets all the color values of the image as a list 
 var imageData = context.getImageData(0, 0, canvas.width, canvas.height); 
 
 // Create the starting list of points
@@ -64,12 +68,21 @@ function reset(){
 
     draw();
 }
+
 // Add a point to the diagram
 function add(){
     Points.push(new ColoredPoint(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height)));
 
     draw();
 }
+
+// Remove a point from the diagram
+function remove(){
+    Points.pop()
+    
+    draw();
+}
+
 function ShowPoints(){
     for (let i = 0; i < Points.length; i++) {
         for (var y = 0; y < 7; y++) {
